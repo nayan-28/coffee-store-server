@@ -9,8 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.swu9d.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri);
+const uri = "mongodb+srv://nayanmalakar420:6DoM85wzHqyxs6kH@cluster0.11cidei.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -28,7 +27,7 @@ async function run() {
 
         const coffeeCollection = client.db('coffeeDB').collection('coffee');
 
-        app.get('/coffee', async (req, res) => {
+        app.get('/coffee', async(req, res) => {
             const cursor = coffeeCollection.find();
             const result = await cursor.toArray();
             res.send(result);
@@ -36,12 +35,12 @@ async function run() {
 
         app.get('/coffee/:id', async(req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await coffeeCollection.findOne(query);
             res.send(result);
         })
 
-        app.post('/coffee', async (req, res) => {
+        app.post('/coffee', async(req, res) => {
             const newCoffee = req.body;
             console.log(newCoffee);
             const result = await coffeeCollection.insertOne(newCoffee);
@@ -50,18 +49,18 @@ async function run() {
 
         app.put('/coffee/:id', async(req, res) => {
             const id = req.params.id;
-            const filter = {_id: new ObjectId(id)}
+            const filter = { _id: new ObjectId(id) }
             const options = { upsert: true };
             const updatedCoffee = req.body;
 
             const coffee = {
                 $set: {
-                    name: updatedCoffee.name, 
-                    quantity: updatedCoffee.quantity, 
-                    supplier: updatedCoffee.supplier, 
-                    taste: updatedCoffee.taste, 
-                    category: updatedCoffee.category, 
-                    details: updatedCoffee.details, 
+                    name: updatedCoffee.name,
+                    quantity: updatedCoffee.quantity,
+                    supplier: updatedCoffee.supplier,
+                    taste: updatedCoffee.taste,
+                    category: updatedCoffee.category,
+                    details: updatedCoffee.details,
                     photo: updatedCoffee.photo
                 }
             }
@@ -70,7 +69,7 @@ async function run() {
             res.send(result);
         })
 
-        app.delete('/coffee/:id', async (req, res) => {
+        app.delete('/coffee/:id', async(req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await coffeeCollection.deleteOne(query);
